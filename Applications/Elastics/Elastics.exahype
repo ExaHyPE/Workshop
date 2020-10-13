@@ -1,0 +1,109 @@
+/**
+ * This file is part of the ExaHyPE project.
+ * Copyright (c) 2016  http://exahype.eu
+ * All rights reserved.
+ *
+ * The project has received funding from the European Union's Horizon 
+ * 2020 research and innovation programme under grant agreement
+ * No 671698. For copyrights and licensing, please consult the webpage.
+ *
+ * Released under the BSD 3 Open Source License.
+ * For the full license text, see LICENSE.txt
+ **/
+ 
+/**
+
+ Linear Wave
+
+ A simple project. (well, it was simple, in the beginning).
+
+ */
+exahype-project  Linear
+
+  peano-kernel-path const = ./Peano
+  exahype-path const      = ./ExaHyPE
+  output-directory const  = ./ApplicationExamples/workshop/Elastics
+  architecture const      = noarch
+  //log-file                = mylogfile.log
+
+  computational-domain
+    dimension const          = 2
+    width                    = 10.0, 10.0
+    offset                   = 0.0, 0.0
+    end-time                 = 20.0
+  end computational-domain
+
+  shared-memory
+    identifier               = dummy
+    configure                = {background-tasks:7}
+    cores                    = 8
+    properties-file          = sharedmemory.properties
+  end shared-memory
+ 
+
+  /*distributed-memory
+    identifier               = static_load_balancing
+    configure                = {greedy-naive,FCFS}
+    buffer-size              = 64
+    timeout                  = 60
+  end distributed-memory*/
+
+  global-optimisation
+    fuse-algorithmic-steps          = all
+    fuse-algorithmic-steps-rerun-factor   = 0.99
+    fuse-algorithmic-steps-diffusion-factor   = 0.99
+    spawn-predictor-as-background-thread = off
+    spawn-amr-background-threads         = off
+    /* 0.0 und 0.8 sind schon mal zwei Faktoren */
+    disable-vertex-exchange-in-time-steps = on
+    time-step-batch-factor           = 0.0
+    disable-metadata-exchange-in-batched-time-steps = off
+    double-compression = 0.0
+    spawn-double-compression-as-background-thread = off
+  end global-optimisation
+
+  solver ADER-DG ElasticWaveSolver
+    variables const    = v:2, sigma:3
+    parameters const   = rho:1,cp:1,cs:1
+    order const        = 3
+    maximum-mesh-size  = 0.5
+    maximum-mesh-depth = 0
+    time-stepping      = global
+    type const         = linear, Legendre
+    terms const        = flux,ncp,materialparameters,pointsources:1
+    optimisation const = generic
+    language const     = C
+
+    plot probe::ascii ProbeWriter
+      variables const = 8       
+      time            = 0.0     
+      repeat          = 0.05    
+      output          = ./receiver_1
+      select          = x:5.0,y:0.2
+    end plot
+    
+    plot probe::ascii ProbeWriter
+      variables const = 8       
+      time            = 0.0     
+      repeat          = 0.05    
+      output          = ./receiver_2
+      select          = x:2.5,y:0.2
+    end plot
+
+    plot probe::ascii ProbeWriter
+      variables const = 8
+      time            = 0.0     
+      repeat          = 0.05    
+      output          = ./receiver_3
+      select          = x:0.2,y:0.2
+    end plot
+
+    plot vtk::Cartesian::cells::ascii WaveFieldWriter
+      variables const = 8
+      time            = 0.2
+      repeat          = 1e-2
+      output          = ./conserved
+    end plot
+
+  end solver
+end exahype-project
