@@ -144,30 +144,7 @@ class Linear::ElasticWaveSolver : public Linear::AbstractElasticWaveSolver {
     
 /* algebraicSource() function not included, as requested by the specification file */
 
-    /**
-     * Compute the nonconservative term $B(Q) \nabla Q$.
-     * 
-     * This function shall return a vector BgradQ which holds the result
-     * of the full term. To do so, it gets the vector Q and the matrix
-     * gradQ which holds the derivative of Q in each spatial direction.
-     * Currently, the gradQ is a continous storage and users can use the
-     * kernels::icellSize2 class in order to compute the positions inside gradQ.
-     *
-     * @TODO: Check if the following is still right:
-     * 
-     * !!! Warning: BgradQ is a vector of size NumberOfVariables if you
-     * use the ADER-DG kernels for nonlinear PDEs. If you use
-     * the kernels for linear PDEs, it is a tensor with dimensions
-     * Dim x NumberOfVariables.
-     * 
-     * @param[in]    Q      vector of state variables (plus material 
-     *                      parameters); range: [0,nVar+nPar-1], already allocated.
-     * @param[in]    gradQ  the gradients of the vector of unknowns, stored 
-     *                      in a linearized array. (range: [0,dim*(nVar+nPar)-1].
-     * @param[inout] BgradQ the nonconservative product (extends nVar), 
-     *                      already allocated. 
-     */
-    void nonConservativeProduct(const double* const Q,const double* const * const gradQ,double** const BgradQ) final override;
+/* nonConservativeProduct() function is not included, as requested in the specification file */
 
 
     /**
@@ -200,34 +177,7 @@ class Linear::ElasticWaveSolver : public Linear::AbstractElasticWaveSolver {
      */
      void pointSource(const double* const Q,const double* const x,const double t,const double dt, double* const forceVector,int n) override;
 
-    /**
-     * @TODO LR : document
-     * 
-     * @param[in]  Q     vector of state variables (plus material 
-     *                   parameters); range: [0,nVar+nPar-1], already allocated.
-     * @param[inout] rhs the right-hand side associated with Q; 
-     *                   range: [0,nVar-1], already allocated.
-     */
-    void multiplyMaterialParameterMatrix(const double* const Q, double** const rhs) final override;
-
-    /* void riemannSolver(double* const FL,double* const FR,const double* const QL,const double* const QR,const double t,const double dt, const tarch::la::Vector<DIMENSIONS, double>& cellSize,const int direction, bool isBoundaryFace, int faceIndex) final override; */
-    /* /\* implement user defined numerical boundary procedures*\/ */
-    /* void riemannSolver_BC0(double v, double sigma, double z,  double r, double& v_hat, double& sigma_hat); */
-    /* void riemannSolver_BCn(double v, double sigma, double z,  double r, double& v_hat, double& sigma_hat); */
-
-    /* /\* implement user defined numerical fluxes*\/ */
-    /* void riemannSolver_Nodal(double v_p,double v_m, double sigma_p, double sigma_m, double z_p , double z_m, double& v_hat_p , double& v_hat_m, double& sigma_hat_p, double& sigma_hat_m); */
-
-    /* void localBasis(double* const n, double* const m); */
-
-    /* void riemannSolver_boundary(int faceIndex,double r, double vn , double vm, double Tn , double Tm, double zp, double zs,  double& vn_hat , double& vm_hat , double& Tn_hat , double& Tm_hat); */
-    
-    /* void generate_fluctuations_right(double z,  double T,double T_hat,double v, double v_hat, double& F); */
-    /* void generate_fluctuations_left(double z,  double T,double T_hat,double v, double v_hat, double& F); */
-    /* void rotate_into_physical_basis(double* const n,double* const m, double Fn,double Fm, double& Fx, double& Fy); */
-    /* void rotate_into_orthogonal_basis(double* const n,double* const m, double Tx,double Ty, double& Tn, double& Tm); */
-    /* void extract_tractions_and_particle_velocity(double* const n, const double* const Q, double& Tx,double& Ty,double& vx,double& vy); */
-    /* void get_normals(int normalNonZeroIndex,double& norm, double* const n,const double* const Q); */
+/* multiplyMaterialParameterMatrix() not included, as requested in the specification file */
 };
 
 #endif // __ElasticWaveSolver_CLASS_HEADER__
