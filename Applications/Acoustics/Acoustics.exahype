@@ -23,22 +23,22 @@ exahype-project  Linear
   peano-kernel-path const = ./Peano
   exahype-path const      = ./ExaHyPE
   output-directory const  = ./ApplicationExamples/workshop/Acoustics
-  architecture const      = noarch
-  log-file                = mylogfile.log
+  architecture const      = hsw
+  //log-file              = mylogfile.log
 
   computational-domain
     dimension const          = 2
     width                    = 10.0, 10.0
     offset                   = 0.0, 0.0
-    end-time                 = 10.0
+    end-time                 = 5.0
   end computational-domain
 
-  /*shared-memory
+  shared-memory
     identifier               = dummy
-    configure                = {}
+    configure                = {background-tasks:7}
     cores                    = 8
     properties-file          = sharedmemory.properties
-  end shared-memory*/
+  end shared-memory
  
 
   /*distributed-memory
@@ -62,30 +62,32 @@ exahype-project  Linear
     spawn-double-compression-as-background-thread = off
   end global-optimisation
 
-  solver ADER-DG MyLinearWaveSolver
+  solver ADER-DG AcousticWaveSolver
     variables const    = p:1,v:2
-    parameters const  = rho:1,c:1
+    parameters const   = rho:1,c:1
     order const        = 3
-    maximum-mesh-size  = 0.5
+    maximum-mesh-size  = 0.1
     maximum-mesh-depth = 0
     time-stepping      = global
     type const         = linear, Legendre
-    terms const        = flux,ncp,materialparameters,pointsources:2
-    optimisation const = generic,patchwiseadjust
+    terms const        = flux,pointsources:1
+    optimisation const = generic
     language const     = C
 
-    plot vtk::Legendre::cells::ascii ConservedQuantitiesWriter
-      variables const = 3
-      time            = 0.0
+    plot probe::ascii ProbeWriter
+      variables const = 5       
+      time            = 0.0     
+      repeat          = 0.05    
+      output          = ./receiver
+      select          = x:0.2,y:0.2
+    end plot
+
+    plot vtk::Cartesian::cells::ascii WaveFieldWriter
+      variables const = 5
+      time            = 10000.0
       repeat          = 1e-2
       output          = ./conserved
     end plot
 
-    plot vtk::Cartesian::vertices::ascii ExactPrimitivesWriter
-      variables const = 3
-      time            = 0.0
-      repeat          = 0.05
-      output          = ./exact-primitive
-    end plot
   end solver
 end exahype-project

@@ -1,5 +1,5 @@
 /**
- * This file is part of the ExaHyPE project.
+1;5202;0c * This file is part of the ExaHyPE project.
  * Copyright (c) 2016  http://exahype.eu
  * All rights reserved.
  *
@@ -29,8 +29,8 @@ exahype-project  Linear
   computational-domain
     dimension const          = 2
     width                    = 10.0, 10.0
-    offset                   = 0.0, 0.0
-    end-time                 = 20.0
+    offset                   = -5.0, -5.0
+    end-time                 = 4.0
   end computational-domain
 
   shared-memory
@@ -66,11 +66,11 @@ exahype-project  Linear
     variables const    = v:2, sigma:3
     parameters const   = rho:1,cp:1,cs:1
     order const        = 3
-    maximum-mesh-size  = 0.5
+    maximum-mesh-size  = 0.1
     maximum-mesh-depth = 0
     time-stepping      = global
     type const         = linear, Legendre
-    terms const        = flux,ncp,materialparameters,pointsources:1
+    terms const        = flux,pointsources:1
     optimisation const = generic
     language const     = C
 
@@ -78,8 +78,16 @@ exahype-project  Linear
       variables const = 8       
       time            = 0.0     
       repeat          = 0.05    
+      output          = ./receiver
+      select          = x:0.0,y:1.0
+    end plot
+
+    plot probe::ascii ProbeWriter
+      variables const = 8       
+      time            = 0.0     
+      repeat          = 0.05    
       output          = ./receiver_1
-      select          = x:5.0,y:0.2
+      select          = x:0.693,y:0.0
     end plot
     
     plot probe::ascii ProbeWriter
@@ -87,7 +95,7 @@ exahype-project  Linear
       time            = 0.0     
       repeat          = 0.05    
       output          = ./receiver_2
-      select          = x:2.5,y:0.2
+      select          = x:5.543,y:0.0
     end plot
 
     plot probe::ascii ProbeWriter
@@ -95,12 +103,12 @@ exahype-project  Linear
       time            = 0.0     
       repeat          = 0.05    
       output          = ./receiver_3
-      select          = x:0.2,y:0.2
+      select          = x:10.392,y:0.0
     end plot
 
     plot vtk::Cartesian::cells::ascii WaveFieldWriter
       variables const = 8
-      time            = 0.2
+      time            = 1000000.2
       repeat          = 1e-2
       output          = ./conserved
     end plot

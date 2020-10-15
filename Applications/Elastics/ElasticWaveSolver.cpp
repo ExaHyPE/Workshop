@@ -23,17 +23,19 @@ void Linear::ElasticWaveSolver::init(const std::vector<std::string>& cmdlineargs
 void Linear::ElasticWaveSolver::adjustPointSolution(const double* const x,const double t,const double dt,double* const Q) {
   VariableShortcuts s;
   if (tarch::la::equals(t,0.0)) {
-    //    double r2 = (x[0]-5.0)*(x[0]-5.0) + (x[1]-5.0)*(x[1]-5.0);
-    //    Q[s.v + 0]     = exp(-r2);
-    //    Q[s.v + 1]     = exp(-r2);
-    Q[s.v + 0]     = 0.0;
-    Q[s.v + 1]     = 0.0;    
+    //Initial Condiation Task 2
+    double r2 = (x[0])*(x[0]-5.0) + (x[1])*(x[1]-5.0);
+    Q[s.v + 0]     = exp(-r2);
+    Q[s.v + 1]     = exp(-r2);
+    //Initial Condiation Task 3
+    // Q[s.v + 0]     = 0.0;
+    // Q[s.v + 1]     = 0.0;    
     Q[s.sigma + 0] = 0.0;
     Q[s.sigma + 1] = 0.0;
     Q[s.sigma + 2] = 0.0;
     Q[s.rho]       = 2.7;
     Q[s.cp]        = 6.0;
-    Q[s.cs]        = 3.343;
+    Q[s.cs]        = 3.464;
   }
 }
 
@@ -43,38 +45,24 @@ void Linear::ElasticWaveSolver::boundaryValues(const double* const x,const doubl
   int normal_traction, tangent_traction;
   VariableShortcuts s;
 
-  if (direction == 0){
-    normal_velocity  = s.v + 0;
-    normal_traction = s.sigma + 0;
-    tangent_velocity  = s.v + 1;
-    tangent_traction = s.sigma + 1;
-  }else{
-    normal_velocity  = s.v + 1;
-    normal_traction = s.sigma + 1;
-    tangent_velocity  = s.v + 0;
-    tangent_traction = s.sigma + 0;
-  }
-
   //abc
-  stateOut[normal_velocity] = 0;
-  stateOut[tangent_velocity] = 0;
-  stateOut[normal_traction] = 0;
-  stateOut[tangent_traction] = stateIn[tangent_traction];
+  stateOut[0] = 0;
+  stateOut[1] = 0;
+  stateOut[2] = 0;
+  stateOut[3] = 0;
   stateOut[4] = 0;
   stateOut[5] = stateIn[5];
   stateOut[6] = stateIn[6];
   stateOut[7] = stateIn[7];
 
-
-  stateOut[normal_velocity] = 0;
-  stateOut[tangent_velocity] = 0;
-  stateOut[normal_traction] = 0;
-  stateOut[tangent_traction] = 0;
-  stateOut[4] = 0;
-  stateOut[5] = stateIn[5];
-  stateOut[6] = stateIn[6];
-  stateOut[7] = stateIn[7];
-
+  //freeSurface Task 2
+  // if(faceIndex == 2){
+  //   stateOut[0] = stateOut[0];
+  //   stateOut[1] = stateOut[1];
+  //   stateOut[2] = -stateIn[2];
+  //   stateOut[3] = -stateIn[3];
+  //   stateOut[4] = -stateIn[4];
+  // }
 
   fluxOut[0] = 0.0;
   fluxOut[1] = 0.0;
@@ -112,74 +100,6 @@ void Linear::ElasticWaveSolver::flux(const double* const Q,double** const F) {
 
   VariableShortcuts s;
 
-  double sxx = Q[s.sigma + 0];
-  double syy = Q[s.sigma + 1];
-  double sxy = Q[s.sigma + 2];
-    
-  F[0][0] = -sxx;
-  F[0][1] = -sxy;
-  F[0][2] =  0.0;
-  F[0][3] =  0.0;
-  F[0][4] =  0.0;
-  
-  F[1][0] = -sxy;
-  F[1][1] = -syy;
-  F[1][2] =  0.0;
-  F[1][3] =  0.0;
-  F[1][4] =  0.0;  
-}
-
-
-
-void  Linear::ElasticWaveSolver::nonConservativeProduct(const double* const Q,const double* const * const gradQ,double** const BgradQ) {
-
-  VariableShortcuts s;
-
-  double u_x = gradQ[0][s.v + 0];
-  double v_x = gradQ[0][s.v + 1];
-  double u_y = gradQ[1][s.v + 0];
-  double v_y = gradQ[1][s.v + 1];
-
-  BgradQ[0][0] =  0.0;
-  BgradQ[0][1] =  0.0;
-  BgradQ[0][2] = -u_x;
-  BgradQ[0][3] =  0.0;
-  BgradQ[0][4] = -v_x;
-  
-  BgradQ[1][0] =  0.0;
-  BgradQ[1][1] =  0.0;
-  BgradQ[1][2] =  0.0;
-  BgradQ[1][3] = -v_y;
-  BgradQ[1][4] = -u_y;
-}
-
-
-void  Linear::ElasticWaveSolver::initPointSourceLocations(const std::vector<std::string>& cmdlineargs,const exahype::parser::ParserView& constants){
-  pointSourceLocation[0][0]=5.0;
-  pointSourceLocation[0][1]=5.0;
-}
-
-void  Linear::ElasticWaveSolver::pointSource(const double* const Q,const double* const x,const double t,const double dt, double* const forceVector, int n) {
-
-  VariableShortcuts s;
-  double pi = 3.14159265359;
-  double sigma = 0.1149;
-  double t0 = 0.7;
-  double f = 0.0;
-  double M0 = 1000.0;
-
-  f = (1.0/(sigma*std::sqrt(2.0*pi)))*(std::exp(-((t-t0)*(t-t0))/(2.0*sigma*sigma)));
-
-  forceVector[0] = 0.0;
-  forceVector[1] = 0.0;
-  forceVector[2] = f;
-  forceVector[3] = f;
-  forceVector[4] = 0.0;
-}
-
-void Linear::ElasticWaveSolver::multiplyMaterialParameterMatrix(const double* const Q, double** const rhs) {
-  VariableShortcuts s;
-
   const double rho  = Q[s.rho];
   const double cp   = Q[s.cp];   
   const double cs   = Q[s.cs];
@@ -187,17 +107,46 @@ void Linear::ElasticWaveSolver::multiplyMaterialParameterMatrix(const double* co
   const double mu  = rho*cs*cs;
   const double lambda = rho*cp*cp-2.0*mu;  
 
-  for (int d = 0 ; d< DIMENSIONS ; d++){
-    rhs[d][0] = 1.0/rho*rhs[d][0];
-    rhs[d][1] = 1.0/rho*rhs[d][1];
-    
-    double rhs_2 = (2*mu+lambda)*rhs[d][2] + lambda*rhs[d][3];
-    double rhs_3 = (2*mu+lambda)*rhs[d][3] + lambda*rhs[d][2];
-    
-    rhs[d][2] = rhs_2;
-    rhs[d][3] = rhs_3;
-    
-    rhs[d][4] = mu * rhs[d][4];
-  }
+  double sxx = Q[s.sigma + 0];
+  double syy = Q[s.sigma + 1];
+  double sxy = Q[s.sigma + 2];
 
+  double u = Q[s.v + 0];
+  double v = Q[s.v + 1];
+    
+  F[0][0] = -1.0/rho*sxx;
+  F[0][1] = -1.0/rho*sxy;
+  F[0][2] = -(2*mu+lambda)*u;
+  F[0][3] = -lambda * u;
+  F[0][4] = -mu*v;
+  
+  F[1][0] = -1.0/rho*sxy;
+  F[1][1] = -1.0/rho*syy;
+  F[1][2] = -lambda * v;
+  F[1][3] = -(2*mu+lambda)*v;
+  F[1][4] = -mu*u;  
+}
+
+
+void  Linear::ElasticWaveSolver::initPointSourceLocations(const std::vector<std::string>& cmdlineargs,const exahype::parser::ParserView& constants){
+  pointSourceLocation[0][0]=0.0;
+  pointSourceLocation[0][1]=0.693;
+}
+
+void  Linear::ElasticWaveSolver::pointSource(const double* const Q,const double* const x,const double t,const double dt, double* const forceVector, int n) {
+
+  VariableShortcuts s;
+
+  constexpr double t0 = 0.1;
+  constexpr double M0 = 1000.0;
+    
+  double f = M0*t/(t0*t0)*std::exp(-t/t0);
+
+  forceVector[0] = 0.0;
+  forceVector[1] = 0.0;
+  forceVector[2] = 0.0;
+  forceVector[3] = 0.0;
+  forceVector[4] = 0.0;
+  // Force Vector Task 2
+  //forceVector[4] = -f;
 }
