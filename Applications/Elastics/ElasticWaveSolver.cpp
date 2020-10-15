@@ -24,7 +24,7 @@ void Linear::ElasticWaveSolver::adjustPointSolution(const double* const x,const 
   VariableShortcuts s;
   if (tarch::la::equals(t,0.0)) {
     //Initial Condiation Task 2
-    double r2 = (x[0])*(x[0]-5.0) + (x[1])*(x[1]-5.0);
+    double r2 = (x[0])*(x[0]) + (x[1]-5.0)*(x[1]-5.0);
     Q[s.v + 0]     = exp(-r2);
     Q[s.v + 1]     = exp(-r2);
     //Initial Condiation Task 3

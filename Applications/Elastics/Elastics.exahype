@@ -23,7 +23,7 @@ exahype-project  Linear
   peano-kernel-path const = ./Peano
   exahype-path const      = ./ExaHyPE
   output-directory const  = ./ApplicationExamples/workshop/Elastics
-  architecture const      = noarch
+  architecture const      = hsw
   //log-file                = mylogfile.log
 
   computational-domain
@@ -71,7 +71,7 @@ exahype-project  Linear
     time-stepping      = global
     type const         = linear, Legendre
     terms const        = flux,pointsources:1
-    optimisation const = generic
+    optimisation const = optimised
     language const     = C
 
     plot probe::ascii ProbeWriter
