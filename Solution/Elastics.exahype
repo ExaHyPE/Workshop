@@ -82,9 +82,33 @@ exahype-project  Linear
       select          = x:0.0,y:1.0
     end plot
 
+    plot probe::ascii ProbeWriter
+      variables const = 8       
+      time            = 0.0     
+      repeat          = 0.05    
+      output          = ./receiver_1
+      select          = x:0.693,y:0.0
+    end plot
+    
+    plot probe::ascii ProbeWriter
+      variables const = 8       
+      time            = 0.0     
+      repeat          = 0.05    
+      output          = ./receiver_2
+      select          = x:5.543,y:0.0
+    end plot
+
+    plot probe::ascii ProbeWriter
+      variables const = 8
+      time            = 0.0     
+      repeat          = 0.05    
+      output          = ./receiver_3
+      select          = x:10.392,y:0.0
+    end plot
+
     plot vtk::Cartesian::cells::ascii WaveFieldWriter
       variables const = 8
-      time            = 0.2
+      time            = 1000000.2
       repeat          = 1e-2
       output          = ./conserved
     end plot
