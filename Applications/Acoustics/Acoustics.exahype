@@ -23,7 +23,7 @@ exahype-project  Linear
   peano-kernel-path const = ./Peano
   exahype-path const      = ./ExaHyPE
   output-directory const  = ./ApplicationExamples/workshop/Acoustics
-  architecture const      = snb
+  architecture const      = noarch
   //log-file              = mylogfile.log
 
   computational-domain
@@ -84,8 +84,8 @@ exahype-project  Linear
 
     plot vtk::Cartesian::cells::ascii WaveFieldWriter
       variables const = 5
-      time            = 10000.0
-      repeat          = 1e-2
+      time            = 0.0
+      repeat          = 0.5
       output          = ./conserved
     end plot
 
