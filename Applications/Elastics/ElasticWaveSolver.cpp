@@ -23,7 +23,7 @@ void Linear::ElasticWaveSolver::init(const std::vector<std::string>& cmdlineargs
 void Linear::ElasticWaveSolver::adjustPointSolution(const double* const x,const double t,const double dt,double* const Q) {
   VariableShortcuts s;
   if (tarch::la::equals(t,0.0)) {
-    //Task 2 & Task 3: Set initial conditions 
+    //Task 1 & Task 2: Set initial conditions 
     Q[s.v + 0]     = 0.0;
     Q[s.v + 1]     = 0.0;
     Q[s.sigma + 0] = 0.0;
@@ -58,7 +58,7 @@ void Linear::ElasticWaveSolver::boundaryValues(const double* const x,const doubl
   fluxOut[4] = 0.0;
 
 
-  //Task 3: Implement free surface boundary condition
+  //Task 2: Implement free surface boundary condition
   
 }
 
@@ -78,7 +78,7 @@ exahype::solvers::Solver::RefinementControl Linear::ElasticWaveSolver::refinemen
 void Linear::ElasticWaveSolver::eigenvalues(const double* const Q,const int direction,double* const lambda) {
   VariableShortcuts s;
 
-  //Task 2: Set eigenvalues
+  //Task 1: Set eigenvalues
   lambda[0] =  0.0;
   lambda[1] =  0.0;
   lambda[2] =  0.0; 
@@ -92,7 +92,7 @@ void Linear::ElasticWaveSolver::flux(const double* const Q,double** const F) {
 
   VariableShortcuts s;
 
-  //Task 2: Implement flux function
+  //Task 1: Implement flux function
   F[0][0] = 0.0;
   F[0][1] = 0.0;
   F[0][2] = 0.0;
@@ -109,7 +109,7 @@ void Linear::ElasticWaveSolver::flux(const double* const Q,double** const F) {
 
 void  Linear::ElasticWaveSolver::initPointSourceLocations(const std::vector<std::string>& cmdlineargs,const exahype::parser::ParserView& constants){
   
-  //Task 3: Set point source location
+  //Task 2: Set point source location
   pointSourceLocation[0][0] = 0.0;
   pointSourceLocation[0][1] = 0.0;
 }
@@ -117,7 +117,7 @@ void  Linear::ElasticWaveSolver::initPointSourceLocations(const std::vector<std:
 void  Linear::ElasticWaveSolver::pointSource(const double* const Q,const double* const x,const double t,const double dt, double* const forceVector, int n) {
 
   VariableShortcuts s;
-  //Task 3 Set point source force vector
+  //Task 2 Set point source force vector
   forceVector[0] = 0.0;
   forceVector[1] = 0.0;
   forceVector[2] = 0.0;

@@ -23,11 +23,11 @@ void Linear::ElasticWaveSolver::init(const std::vector<std::string>& cmdlineargs
 void Linear::ElasticWaveSolver::adjustPointSolution(const double* const x,const double t,const double dt,double* const Q) {
   VariableShortcuts s;
   if (tarch::la::equals(t,0.0)) {
-    //Initial Condiation Task 2
+    //Initial Condiation Task 1
     double r2 = (x[0])*(x[0]) + (x[1]-5.0)*(x[1]-5.0);
     Q[s.v + 0]     = exp(-r2);
     Q[s.v + 1]     = exp(-r2);
-    //Initial Condiation Task 3
+    //Initial Condiation Task 2
     // Q[s.v + 0]     = 0.0;
     // Q[s.v + 1]     = 0.0;    
     Q[s.sigma + 0] = 0.0;
@@ -85,6 +85,7 @@ exahype::solvers::Solver::RefinementControl Linear::ElasticWaveSolver::refinemen
 
 
 void Linear::ElasticWaveSolver::eigenvalues(const double* const Q,const int direction,double* const lambda) {
+  // Eigenvalues Task 1
   VariableShortcuts s;
 
   lambda[0] =  Q[s.cp];
@@ -98,6 +99,8 @@ void Linear::ElasticWaveSolver::eigenvalues(const double* const Q,const int dire
 
 void Linear::ElasticWaveSolver::flux(const double* const Q,double** const F) {
 
+  // Flux vector Task 1
+  
   VariableShortcuts s;
 
   const double rho  = Q[s.rho];
@@ -129,6 +132,7 @@ void Linear::ElasticWaveSolver::flux(const double* const Q,double** const F) {
 
 
 void  Linear::ElasticWaveSolver::initPointSourceLocations(const std::vector<std::string>& cmdlineargs,const exahype::parser::ParserView& constants){
+  // PointSource location Task 2
   pointSourceLocation[0][0]=0.0;
   pointSourceLocation[0][1]=0.693;
 }
