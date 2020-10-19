@@ -28,8 +28,8 @@ exahype-project  Linear
 
   computational-domain
     dimension const          = 2
-    width                    = 10.0, 10.0
-    offset                   = -5.0, -5.0
+    width                    = 20.0, 20.0
+    offset                   = -5.0,  0.0
     end-time                 = 4.0
   end computational-domain
 
@@ -78,14 +78,6 @@ exahype-project  Linear
       variables const = 8       
       time            = 0.0     
       repeat          = 0.05    
-      output          = ./receiver
-      select          = x:0.0,y:1.0
-    end plot
-
-    plot probe::ascii ProbeWriter
-      variables const = 8       
-      time            = 0.0     
-      repeat          = 0.05    
       output          = ./receiver_1
       select          = x:0.693,y:0.0
     end plot
@@ -108,8 +100,8 @@ exahype-project  Linear
 
     plot vtk::Cartesian::cells::ascii WaveFieldWriter
       variables const = 8
-      time            = 1000000.2
-      repeat          = 1e-2
+      time            = 0.2
+      repeat          = 0.5
       output          = ./conserved
     end plot
 

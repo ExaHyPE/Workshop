@@ -24,12 +24,12 @@ void Linear::ElasticWaveSolver::adjustPointSolution(const double* const x,const 
   VariableShortcuts s;
   if (tarch::la::equals(t,0.0)) {
     //Initial Condiation Task 1
-    double r2 = (x[0])*(x[0]) + (x[1]-5.0)*(x[1]-5.0);
-    Q[s.v + 0]     = exp(-r2);
-    Q[s.v + 1]     = exp(-r2);
+    // double r2 = (x[0])*(x[0]) + (x[1]-5.0)*(x[1]-5.0);
+    // Q[s.v + 0]     = exp(-r2);
+    // Q[s.v + 1]     = exp(-r2);
     //Initial Condiation Task 2
-    // Q[s.v + 0]     = 0.0;
-    // Q[s.v + 1]     = 0.0;    
+    Q[s.v + 0]     = 0.0;
+    Q[s.v + 1]     = 0.0;    
     Q[s.sigma + 0] = 0.0;
     Q[s.sigma + 1] = 0.0;
     Q[s.sigma + 2] = 0.0;
@@ -56,13 +56,13 @@ void Linear::ElasticWaveSolver::boundaryValues(const double* const x,const doubl
   stateOut[7] = stateIn[7];
 
   //freeSurface Task 2
-  // if(faceIndex == 2){
-  //   stateOut[0] = stateOut[0];
-  //   stateOut[1] = stateOut[1];
-  //   stateOut[2] = -stateIn[2];
-  //   stateOut[3] = -stateIn[3];
-  //   stateOut[4] = -stateIn[4];
-  // }
+  if(faceIndex == 2){
+    stateOut[0] = stateOut[0];
+    stateOut[1] = stateOut[1];
+    stateOut[2] = -stateIn[2];
+    stateOut[3] = -stateIn[3];
+    stateOut[4] = -stateIn[4];
+  }
 
   fluxOut[0] = 0.0;
   fluxOut[1] = 0.0;
@@ -150,7 +150,7 @@ void  Linear::ElasticWaveSolver::pointSource(const double* const Q,const double*
   forceVector[1] = 0.0;
   forceVector[2] = 0.0;
   forceVector[3] = 0.0;
-  forceVector[4] = 0.0;
   // Force Vector Task 2
-  //forceVector[4] = -f;
+  //forceVector[4] = 0.0;
+  forceVector[4] = -f;
 }
