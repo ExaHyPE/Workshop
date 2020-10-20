@@ -23,7 +23,7 @@ exahype-project  Linear
   peano-kernel-path const = ./Peano
   exahype-path const      = ./ExaHyPE
   output-directory const  = ./ApplicationExamples/workshop/Elastics
-  architecture const      = noarch
+  architecture const      = snb
   //log-file                = mylogfile.log
 
   computational-domain
